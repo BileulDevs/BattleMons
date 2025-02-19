@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.darcosse.battlemons.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "MegaButton"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

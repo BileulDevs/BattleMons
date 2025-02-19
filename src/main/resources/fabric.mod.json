@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "darcosse_battlemons_mod",
+  "version": "${version}",
+  "name": "BattleMons",
+  "description": "A mod for Cobblemon Battles",
+  "authors": [
+    "Darcosse"
+  ],
+  "license": "MIT License",
+  "icon": "assets/example/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.darcosse.battlemons.BattleMons"
+    ]
+  },
+  "depends": {
+    "minecraft": "1.21.1",
+    "cobblemon": ">=1.6.1"
+  },
+  "mixins": [
+    "battlemons.mixins.json"
+  ]
+}
