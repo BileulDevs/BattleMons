@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.DeltaTracker;
-
 import java.util.UUID;
 
 
@@ -28,7 +27,7 @@ public class RenderWeather {
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
         int x = screenWidth / 2 - 100;
-        int y = screenHeight / 5 - 10;
+        int y = screenHeight / 5 + 10;
 
         UUID playerUUID = Minecraft.getInstance().player.getUUID();
         PokemonBattle battle = BattleRegistry.INSTANCE.getBattleByParticipatingPlayerId(playerUUID);
