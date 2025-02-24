@@ -5,26 +5,28 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.battles.BattleRegistry;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.minecraft.client.DeltaTracker;
+
 import java.util.UUID;
 
 
 @Mixin(BattleOverlay.class)
-public class RenderWeather {
+public class RenderTerrains {
 
-    private String weather = "none";
+    private String terrain = "none";
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void findAndShowWeather(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
+    private void findAndShowTerrain(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
 
-        this.weather = "none";
+        this.terrain = "none";
 
         int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
@@ -38,23 +40,24 @@ public class RenderWeather {
 
 
         if(battle != null) {
-            if(battle.getContextManager().get(BattleContext.Type.WEATHER) != null) {
-                if(!battle.getContextManager().get(BattleContext.Type.WEATHER).isEmpty()) {
-                    this.weather = battle.getContextManager().get(BattleContext.Type.WEATHER).iterator().next().getId();
+            if(battle.getContextManager().get(BattleContext.Type.TERRAIN) != null) {
+                if(!battle.getContextManager().get(BattleContext.Type.TERRAIN).isEmpty()) {
+                    this.terrain = battle.getContextManager().get(BattleContext.Type.TERRAIN).iterator().next().getId();
                 } else {
-                    this.weather = "none";
+                    this.terrain = "none";
                 }
             }
         }
 
-        if(this.weather != null && CobblemonClient.INSTANCE.getBattle() != null && !CobblemonClient.INSTANCE.getBattle().getMinimised() && CobblemonClient.INSTANCE.getBattle().getMustChoose()) {
+        if(this.terrain != null && CobblemonClient.INSTANCE.getBattle() != null && !CobblemonClient.INSTANCE.getBattle().getMinimised() && CobblemonClient.INSTANCE.getBattle().getMustChoose()) {
             context.blit(
-                    ResourceLocation.parse("battlemons:textures/gui/weather/"+this.weather+".png"),
-                    12, screenHeight - 113,
+                    ResourceLocation.parse("battlemons:textures/gui/terrain/"+this.terrain+".png"),
+                    46, screenHeight - 108,
                     0, 0,
-                    iconSize, iconSize,
-                    iconSize, iconSize
+                    iconSize, iconSize / 2,
+                    iconSize, iconSize / 2
             );
+
         }
     }
 }

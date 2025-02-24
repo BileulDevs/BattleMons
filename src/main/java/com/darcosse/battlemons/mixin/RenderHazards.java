@@ -55,6 +55,7 @@ public class RenderHazards {
         int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
+        int iconSize = 32;
         int x = screenWidth / 2 - 100;
         int y = screenHeight / 5 + 25;
 
@@ -84,20 +85,17 @@ public class RenderHazards {
             Hazards h = this.countHazards(this.hazardsListSide2).get(i);
 
             context.blit(
-                    ResourceLocation.parse("battlemons:textures/gui/hazard/repeat_ball.png"),
-                    x,
-                    y,
-                    16,
-                    16,
-                    16,
-                    16
-
+                    ResourceLocation.parse("battlemons:textures/gui/hazard/spikes.png"),
+                    12, screenHeight - 140,
+                    0, 0,
+                    iconSize, iconSize,
+                    iconSize, iconSize
             );
 
             context.drawString(
                     Minecraft.getInstance().font,
                     Component.literal("Hazards S2 : "+h.name+", count: "+h.count),
-                    x, y+(i*25), 0xFFFFFF
+                    12, 160, 0xFFFFFF
             );
         }
 
