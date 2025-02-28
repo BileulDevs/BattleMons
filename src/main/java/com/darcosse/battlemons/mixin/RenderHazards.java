@@ -3,6 +3,7 @@ package com.darcosse.battlemons.mixin;
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.battles.BattleRegistry;
+import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -65,7 +66,10 @@ public class RenderHazards {
 
         if(battle != null) {
             if(battle.getSide1().getContextManager().get(BattleContext.Type.HAZARD) != null) {
-                this.hazards1 = battle.getSide1().getContextManager().get(BattleContext.Type.HAZARD).toString();
+                this.hazardsListSide1.clear();
+                battle.getSide1().getContextManager().get(BattleContext.Type.HAZARD).iterator().forEachRemaining(hazard -> {
+                    this.hazardsListSide1.add(hazard.getId());
+                });
             } else {
                 this.hazards1 = "No Hazards";
             }
@@ -81,23 +85,81 @@ public class RenderHazards {
         }
 
 
-        for(int i = 0; i < this.countHazards(this.hazardsListSide2).size(); ++i) {
-            Hazards h = this.countHazards(this.hazardsListSide2).get(i);
+        if((!this.hazardsListSide2.isEmpty() || !this.hazardsListSide1.isEmpty()) && CobblemonClient.INSTANCE.getBattle() != null && !CobblemonClient.INSTANCE.getBattle().getMinimised() && CobblemonClient.INSTANCE.getBattle().getMustChoose()) {
 
-            context.blit(
-                    ResourceLocation.parse("battlemons:textures/gui/hazard/spikes.png"),
-                    12, screenHeight - 140,
-                    0, 0,
-                    iconSize, iconSize,
-                    iconSize, iconSize
-            );
+            //Player
+            for (int i = 0; i < this.countHazards(this.hazardsListSide2).size(); ++i) {
+                Hazards h = this.countHazards(this.hazardsListSide2).get(i);
 
-            context.drawString(
-                    Minecraft.getInstance().font,
-                    Component.literal("Hazards S2 : "+h.name+", count: "+h.count),
-                    12, 160, 0xFFFFFF
-            );
+                if (i == 0) {
+                    context.drawString(
+                            Minecraft.getInstance().font,
+                            Component.literal("Hazards Opponent Side"),
+                            12, screenHeight - 150, 0xFFFFFF
+                    );
+
+                    context.blit(
+                            ResourceLocation.parse("battlemons:textures/gui/hazard/" + h.name + "_" + h.count + ".png"),
+                            12, screenHeight - 140,
+                            0, 0,
+                            iconSize, iconSize,
+                            iconSize, iconSize
+                    );
+                } else {
+
+                    context.drawString(
+                            Minecraft.getInstance().font,
+                            Component.literal("Hazards Opponent Side"),
+                            12, screenHeight - 150, 0xFFFFFF
+                    );
+
+                    context.blit(
+                            ResourceLocation.parse("battlemons:textures/gui/hazard/" + h.name + "_" + h.count + ".png"),
+                            (12 * (i + 1)) + 20, screenHeight - 140,
+                            0, 0,
+                            iconSize, iconSize,
+                            iconSize, iconSize
+                    );
+                }
+
+            }
+
+            //Opponent
+            for (int r = 0; r < this.countHazards(this.hazardsListSide1).size(); ++r) {
+                Hazards hz = this.countHazards(this.hazardsListSide1).get(r);
+
+                if (r == 0) {
+
+                    context.drawString(
+                            Minecraft.getInstance().font,
+                            Component.literal("Hazards Player Side"),
+                            12, screenHeight - 190, 0xFFFFFF
+                    );
+
+                    context.blit(
+                            ResourceLocation.parse("battlemons:textures/gui/hazard/" + hz.name + "_" + hz.count + ".png"),
+                            12, screenHeight - 180,
+                            0, 0,
+                            iconSize, iconSize,
+                            iconSize, iconSize
+                    );
+                } else {
+
+                    context.drawString(
+                            Minecraft.getInstance().font,
+                            Component.literal("Hazards Player Side"),
+                            12, screenHeight - 190, 0xFFFFFF
+                    );
+
+                    context.blit(
+                            ResourceLocation.parse("battlemons:textures/gui/hazard/" + hz.name + "_" + hz.count + ".png"),
+                            (12 * (r + 1)) + 20, screenHeight - 180,
+                            0, 0,
+                            iconSize, iconSize,
+                            iconSize, iconSize
+                    );
+                }
+            }
         }
-
     }
 }
